@@ -6,27 +6,68 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
   <title>我的导航</title>
+  <link rel="stylesheet" href="style.css">
 </head>
 
 <body>
   <header></header>
   <main>
-
+    <div class="wrapper" id="main"></div>
   </main>
   <footer></footer>
 
 
   <script>
-    var keys = {
-      0: ['q'],
-      1: ['a'],
-      3: ['z'],
+    var keys = { /* 二维数组 */
+      0: ['q', 'w', 'e', 'r', 't', 'y', 'u', 'i', 'o', 'p'],
+      1: ['a', 's', 'd', 'f', 'g', 'h', 'j', 'k', 'l'],
+      2: ['z', 'x', 'c', 'v', 'b', 'n', 'm'],
       length: 3
     }
     var hash = {
       q: 'qq.com',
       a: 'alibabagroup.com',
       z: 'zhihu.com'
+    }
+    /* 取出localStorage中的url，覆盖hash */
+    var hashInlocalStorage = JSON.parse(localStorage.getItem('url') || 'null')
+    if (hashInlocalStorage) {
+      hash = hashInlocalStorage
+    }
+    /* 遍历keys,生成kbd标签 */
+    index = 0
+    while (index < keys.length) {
+      var div1 = document.createElement('div')
+      main.appendChild(div1)
+      row = keys[index]
+      // console.log(row)  keys里面的三个数组；
+      index2 = 0
+      while (index2 < row.length) {
+        var kbd1 = document.createElement('kbd')
+        kbd1.textContent = row[index2] // 二维数组的下标
+        div1.appendChild(kbd1)
+        var btn1 = document.createElement('button') // 添加button
+        btn1.textContent = '编辑'
+        btn1.id = row[index2]
+        kbd1.appendChild(btn1)
+        btn1.onclick = function (ev) {
+          key = ev.target.id
+          urls = prompt('请输入一个网址') // 接收数据并返回
+          console.log(urls)
+          hash[key] = urls //将新地址存入hash中，同时运行下一句代码；
+          localStorage.setItem('url', JSON.stringify(hash)) // 将hash存入localStorage中，setItem只接收字符串
+        }
+        index2++
+      }
+      index++
+    }
+    /* 监听键盘事件 */
+    document.onkeypress = function (ev) { /* event事件信息 */
+      key = ev.key
+      website = hash[key]
+      console.log(website)
+      //location.href = 'http://' + website /* 使地址栏中的地址等于website */
+      window.open('http://' + website, '_blank') /* 新标签页中打开 */
     }
 
   </script>
