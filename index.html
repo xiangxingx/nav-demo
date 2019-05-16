@@ -51,8 +51,8 @@
         btn1.id = row[index2]
         kbd1.appendChild(btn1)
         btn1.onclick = function (ev) {
-          key = ev.target.id
-          urls = prompt('请输入一个网址') // 接收数据并返回
+          key = ev.target.id //获取目标id
+          urls = prompt('请输入一个网址') // 接收数据并返回,用户没有输入则返回空字符串
           console.log(urls)
           hash[key] = urls //将新地址存入hash中，同时运行下一句代码；
           localStorage.setItem('url', JSON.stringify(hash)) // 将hash存入localStorage中，setItem只接收字符串
