@@ -29,33 +29,53 @@
       a: 'alibabagroup.com',
       z: 'zhihu.com'
     }
-    /* 取出localStorage中的url，覆盖hash */
-    var hashInlocalStorage = JSON.parse(localStorage.getItem('url') || 'null')
+    /* 取出localStorage中的sites，覆盖hash */
+    var hashInlocalStorage = JSON.parse(localStorage.getItem('sites') || 'null')
     if (hashInlocalStorage) {
       hash = hashInlocalStorage
     }
     /* 遍历keys,生成kbd标签 */
     index = 0
     while (index < keys.length) {
-      var div1 = document.createElement('div')
+      div1 = document.createElement('div')
+      div1.className = 'row'
       main.appendChild(div1)
       row = keys[index]
       // console.log(row)  keys里面的三个数组；
       index2 = 0
       while (index2 < row.length) {
-        var kbd1 = document.createElement('kbd')
-        kbd1.textContent = row[index2] // 二维数组的下标
+        kbd1 = document.createElement('kbd')
+        span1 = document.createElement('span')
+        span1.textContent = row[index2] // 二维数组的下标
+        kbd1.className = 'key'
+        span1.className = 'text'
+        kbd1.appendChild(span1)
         div1.appendChild(kbd1)
-        var btn1 = document.createElement('button') // 添加button
+        btn1 = document.createElement('button') // 添加button
         btn1.textContent = '编辑'
         btn1.id = row[index2]
+        img1 = document.createElement('img')
+        //设置网站图标
+        if (hash[row[index2]]) {
+          img1.src = 'http://' + hash[row[index2]] + '/favicon.ico' //获取网站图标
+        } else {
+          img1.src = '//i.loli.net/2017/11/10/5a05afbc5e183.png'
+        }
+        // 图标获取失败，获取备用图标
+        img1.onerror = function (ev) {
+          ev.target.src = '//i.loli.net/2017/11/10/5a05afbc5e183.png'
+        }
+        kbd1.appendChild(img1)
         kbd1.appendChild(btn1)
         btn1.onclick = function (ev) {
-          key = ev.target.id //获取目标id
-          urls = prompt('请输入一个网址') // 接收数据并返回,用户没有输入则返回空字符串
-          console.log(urls)
-          hash[key] = urls //将新地址存入hash中，同时运行下一句代码；
-          localStorage.setItem('url', JSON.stringify(hash)) // 将hash存入localStorage中，setItem只接收字符串
+          btn2 = ev.target // 返回当前事件目标对象
+          //console.log(btn2)
+          img2 = btn2.previousSibling // 获取到当前事件目标对象的哥哥
+          key = btn2.id //获取目标id
+          sites = prompt('请输入一个网址') // 接收数据并返回,用户没有输入则返回空字符串
+          //console.log(sites)
+          hash[key] = sites //将新地址存入hash中，同时运行下一句代码；
+          localStorage.setItem('sites', JSON.stringify(hash)) // 将hash存入localStorage中，setItem只接收字符串
         }
         index2++
       }
@@ -65,7 +85,7 @@
     document.onkeypress = function (ev) { /* event事件信息 */
       key = ev.key
       website = hash[key]
-      console.log(website)
+      //console.log(website)
       //location.href = 'http://' + website /* 使地址栏中的地址等于website */
       window.open('http://' + website, '_blank') /* 新标签页中打开 */
     }

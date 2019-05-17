@@ -7,8 +7,6 @@ a{
 }
 kbd{
   border: 1px solid red;
-  width: 50px;
-  height: 50px;
   text-transform: uppercase; /* 将小写字母转为大写 */
   display: inline-block;
   position: relative;
@@ -18,19 +16,59 @@ kbd > button{
   bottom: 0;
   right: 0;
   display: none;
+  font-size: 12px;
 }
 kbd:hover > button{
   display: inline-block;
 }
+body{
+  background: #c1c1c1 url(./bgWall.jpg) no-repeat center center;
+  background-size: cover;
+}
 main{
   text-align: center; /* 让main居中 */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
 }
 #main{
   display: inline-block; /* 内联元素 */
+  background: rgba(255, 255, 255, 0.3);
+  border-radius: 10px;
 }
 #main > div:nth-child(2){ /* 第n个div */
-  margin-left: 25px;
+  margin-left: -20px;
 }
 #main > div:nth-child(3){
-  margin-left: 50px;
+  margin-left: -82px;
+}
+.key{
+  width: 50px;
+  height: 40px;
+  background: linear-gradient(to bottom, #292929 0%,#111111 100%);
+  border: 1px solid #373737;
+  color: #c1c1c1;
+  border-radius: 7px; /* 圆角 */
+  box-shadow: 0 0 0 1px #1a1b1c, 0 0 0 2px #1f2020,0 2px 0 2px #080808; /* 阴影效果，三个 */
+  position: relative;
+}
+.key .text{
+  position: absolute;
+  font-size: 16px;
+  font-family: heltiva;
+  left: 4px;
+}
+.row{
+  margin: 16px;
+}
+.row .key{
+  margin: 0 8px;
+}
+.key img{
+  width: 16px;
+  height: 16px;
+  position: absolute;
+  bottom: 2px;
+  left: 4px;
 }
