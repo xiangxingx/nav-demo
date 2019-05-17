@@ -35,7 +35,7 @@
       var div1 = tag('div', { className: 'row' })
       main.appendChild(div1)
       var row = keys[index]
-      
+
       // console.log(row)  keys里面的三个数组；
       for (var index2 = 0; index2 < row.length; index2++) {
 
@@ -61,13 +61,11 @@
           img2.onerror = function (ev) {
             ev.target.src = '//i.loli.net/2017/11/10/5a05afbc5e183.png'
           }
-
           localStorage.setItem('sites', JSON.stringify(hash)) // 将hash存入localStorage中
         }
 
         //设置网站图标
         var img1 = tag('img')
-
         if (hash[row[index2]]) {
           img1.src = 'http://' + hash[row[index2]] + '/favicon.ico' //获取网站图标
         } else {
@@ -84,11 +82,8 @@
         kbd1.appendChild(img1)
         kbd1.appendChild(btn1)
         div1.appendChild(kbd1)
-
-
       }
     }
-
 
     /* 监听键盘事件 */
     document.onkeypress = function (ev) { /* event事件信息 */
