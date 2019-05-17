@@ -10,13 +10,9 @@
 </head>
 
 <body>
-  <header></header>
   <main>
     <div class="wrapper" id="main"></div>
   </main>
-  <footer></footer>
-
-
   <script>
     var keys = { /* 二维数组 */
       0: ['q', 'w', 'e', 'r', 't', 'y', 'u', 'i', 'o', 'p'],
@@ -30,64 +26,89 @@
       z: 'zhihu.com'
     }
     /* 取出localStorage中的sites，覆盖hash */
-    var hashInlocalStorage = JSON.parse(localStorage.getItem('sites') || 'null')
-    if (hashInlocalStorage) {
-      hash = hashInlocalStorage
+    var hashInLocalStorage = getFromLocalStorage('sites')
+    if (hashInLocalStorage) {
+      hash = hashInLocalStorage
     }
     /* 遍历keys,生成kbd标签 */
-    index = 0
-    while (index < keys.length) {
-      div1 = document.createElement('div')
-      div1.className = 'row'
+    for (index = 0; index < keys.length; index++) {
+      var div1 = tag('div', { className: 'row' })
       main.appendChild(div1)
-      row = keys[index]
+      var row = keys[index]
+      
       // console.log(row)  keys里面的三个数组；
-      index2 = 0
-      while (index2 < row.length) {
-        kbd1 = document.createElement('kbd')
-        span1 = document.createElement('span')
+      for (var index2 = 0; index2 < row.length; index2++) {
+
+        var span1 = tag('span', { className: 'text' })
         span1.textContent = row[index2] // 二维数组的下标
-        kbd1.className = 'key'
-        span1.className = 'text'
-        kbd1.appendChild(span1)
-        div1.appendChild(kbd1)
-        btn1 = document.createElement('button') // 添加button
-        btn1.textContent = '编辑'
+
+        var btn1 = tag('button', { textContent: '编辑' }) // 添加button
         btn1.id = row[index2]
-        img1 = document.createElement('img')
+
+        //设置编辑点击事件
+        btn1.onclick = function (ev) {
+          var btn2 = ev.target // 返回当前事件目标对象
+          //console.log(btn2)
+          var key = btn2.id //获取目标id
+          var sites = prompt('请输入一个网址') // 接收数据并返回,用户没有输入则返回空字符串
+          //console.log(sites)
+          hash[key] = sites //将新地址存入hash中
+
+          //使改动后立即获取网站图标
+          var img2 = btn2.previousSibling // 获取到当前事件目标对象的哥哥
+          img2.src = 'http://' + sites + '/favicon.ico'
+          // 如果图标获取失败，则获取备用图标
+          img2.onerror = function (ev) {
+            ev.target.src = '//i.loli.net/2017/11/10/5a05afbc5e183.png'
+          }
+
+          localStorage.setItem('sites', JSON.stringify(hash)) // 将hash存入localStorage中
+        }
+
         //设置网站图标
+        var img1 = tag('img')
+
         if (hash[row[index2]]) {
           img1.src = 'http://' + hash[row[index2]] + '/favicon.ico' //获取网站图标
         } else {
           img1.src = '//i.loli.net/2017/11/10/5a05afbc5e183.png'
         }
-        // 图标获取失败，获取备用图标
+        // 如果图标获取失败，则获取备用图标
         img1.onerror = function (ev) {
           ev.target.src = '//i.loli.net/2017/11/10/5a05afbc5e183.png'
         }
+
+        var kbd1 = tag('kbd', { className: 'key' })
+
+        kbd1.appendChild(span1)
         kbd1.appendChild(img1)
         kbd1.appendChild(btn1)
-        btn1.onclick = function (ev) {
-          btn2 = ev.target // 返回当前事件目标对象
-          //console.log(btn2)
-          img2 = btn2.previousSibling // 获取到当前事件目标对象的哥哥
-          key = btn2.id //获取目标id
-          sites = prompt('请输入一个网址') // 接收数据并返回,用户没有输入则返回空字符串
-          //console.log(sites)
-          hash[key] = sites //将新地址存入hash中，同时运行下一句代码；
-          localStorage.setItem('sites', JSON.stringify(hash)) // 将hash存入localStorage中，setItem只接收字符串
-        }
-        index2++
+        div1.appendChild(kbd1)
+
+
       }
-      index++
     }
+
+
     /* 监听键盘事件 */
     document.onkeypress = function (ev) { /* event事件信息 */
-      key = ev.key
-      website = hash[key]
+      var key = ev.key
+      var website = hash[key]
       //console.log(website)
       //location.href = 'http://' + website /* 使地址栏中的地址等于website */
       window.open('http://' + website, '_blank') /* 新标签页中打开 */
+    }
+
+    function getFromLocalStorage(name) {
+      return JSON.parse(localStorage.getItem(name) || 'null')
+    }
+
+    function tag(tagName, attributes) { //attributes传入的参数：{ className: 'row' }等
+      var element = document.createElement(tagName)
+      for (var key in attributes) {
+        element[key] = attributes[key]
+      }
+      return element
     }
 
   </script>
